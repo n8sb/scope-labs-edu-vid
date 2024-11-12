@@ -1,3 +1,13 @@
+Please upload your solution to GitHub and submit the link here. Include a README in the submitted repository with the following:
+
+-- An overview of your solution and its features.
+
+-- Instructions on how to build and run the application on the web.
+
+-- Screenshots of the platform.
+
+-- Any other necessary information to test the application.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
