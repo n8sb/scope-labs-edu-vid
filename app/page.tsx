@@ -1,14 +1,16 @@
 "use client"; // import Image from "next/image";
 
 import { useEffect, useState } from "react";
+import { BarLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AddVideoModal } from "./components/AddVideoModal";
 import { Comments } from "./components/Comments";
 import { VideoList } from "./components/VideoList";
-import VideoPlayer from "./components/VideoPlayer";
 import { getVideos } from "./services/videos";
 import { VideoDomainType } from "./types";
+import { VideoPlayer } from "./components/VideoPlayer";
+import { AddVideoModal } from "./components/AddVideoModal";
+import Image from "next/image";
 
 export default function Home() {
   const [videosList, setVideosList] = useState<VideoDomainType[] | []>([]);
@@ -30,12 +32,21 @@ export default function Home() {
   }, []);
 
   const successAlert = (message: string) => toast(message);
+  const errorAlert = (message: string) => toast.error(message);
 
   return (
-    <div className='flex flex-col items-center justify-between min-h-screen'>
+    <div className='flex flex-col items-center min-h-screen gap-8'>
       <div className='rounded-md bg-blue-600 bg-opacity-25 w-full h-50 p-3'>
         <div className='flex justify-between items-center'>
-          <div>EduVids</div>
+          <div className='flex gap-2 items-center'>
+            <Image
+              src='video-clip.svg'
+              alt='Video Clip'
+              width={50}
+              height={50}
+            />
+            <div className='font-semibold text-xl'>EduVids</div>
+          </div>
           <button
             className='rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white'
             onClick={() => setIsModalOpen(true)}>
@@ -43,24 +54,34 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <div className='flex sm:flex-row flex-col justify-around w-full mt-5 gap-5'>
-        <div className='flex flex-col gap-4 w-full'>
-          <VideoPlayer selectedVideo={selectedVideo} />
-          <Comments
+      <BarLoader
+        color='#337AB7'
+        loading={!selectedVideo}
+        width='100'
+        height='10'
+      />
+      {selectedVideo && (
+        <div className='flex sm:flex-row flex-col justify-around w-full gap-5'>
+          <div className='flex flex-col gap-4 w-full'>
+            <VideoPlayer selectedVideo={selectedVideo} />
+            <Comments
+              selectedVideo={selectedVideo}
+              successAlert={successAlert}
+              errorAlert={errorAlert}
+            />
+          </div>
+          <VideoList
+            videos={videosList}
+            setSelectedVideo={setSelectedVideo}
             selectedVideo={selectedVideo}
-            successAlert={successAlert}
           />
         </div>
-        <VideoList
-          videos={videosList}
-          setSelectedVideo={setSelectedVideo}
-          selectedVideo={selectedVideo}
-        />
-      </div>
+      )}
       <AddVideoModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         successAlert={successAlert}
+        errorAlert={errorAlert}
         setSelectedVideo={setSelectedVideo}
         getVideos={getAllVideos}
       />
