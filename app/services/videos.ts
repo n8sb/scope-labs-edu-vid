@@ -1,22 +1,31 @@
-import { VideoInputType } from "../types";
+import { USER_ID } from "../constants";
+import { VideoDbType, VideoDomainType, VideoInputType } from "../types";
 
 const baseUrl =
   "https://take-home-assessment-423502.uc.r.appspot.com/api/videos";
 
-export async function getVideos(userId: string) {
-  const data = await fetch(baseUrl + `?user_id=${userId}`);
+export async function getVideos() {
+  const data = await fetch(baseUrl + `?user_id=${USER_ID}`);
   const videos = await data.json();
 
-  return videos.videos;
+  const domainVideos: VideoDomainType[] = videos.videos.map(
+    (video: VideoDbType) => ({
+      video_url: video.video_url,
+      title: video.title,
+      description: video.description,
+      id: video.id,
+    })
+  );
+  return domainVideos;
 }
 
-export const postVideo = async (videoObject: VideoInputType) => {
+export const postVideo = async (videoInput: VideoInputType) => {
   const response = await fetch(baseUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(videoObject),
+    body: JSON.stringify({ ...videoInput, user_id: USER_ID }),
   });
 
   if (!response.ok) {
@@ -24,11 +33,4 @@ export const postVideo = async (videoObject: VideoInputType) => {
   }
 
   return response.json();
-};
-
-export const getSingleVideo = async (videoId: string) => {
-  const data = await fetch(baseUrl + `/single?video_id=${videoId}`);
-  const video = await data.json();
-
-  return video;
 };

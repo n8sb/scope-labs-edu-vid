@@ -1,47 +1,29 @@
-import React from "react";
-import { VideoDBType } from "../types";
-import Image from "next/image";
+import { VideoDomainType } from "../types";
+import { VideoListItem } from "./VideoListItem";
 
 export const VideoList = ({
   videos,
   setSelectedVideo,
   selectedVideo,
 }: {
-  videos: VideoDBType[];
-  setSelectedVideo: (video: VideoDBType) => void;
-  selectedVideo: VideoDBType | null;
+  videos: VideoDomainType[];
+  setSelectedVideo: (video: VideoDomainType) => void;
+  selectedVideo: VideoDomainType | null;
 }) => {
   if (videos.length === 0) return <p>Loading...</p>;
 
-  console.log(videos);
-
-  const getVideoThumbnail = (videoUrl: string) => {
-    if (!videoUrl.includes("youtube.com")) return "";
-    const videoId = videoUrl.split("v=")[1];
-    return `https://img.youtube.com/vi/${videoId}/0`;
-  };
-
   return (
-    <div className='grid grid-cols-3 gap-4'>
-      {videos.map((video) => (
-        <div
-          key={video.id}
-          className={`border-solid border-2 border-white w-full h-24 cursor-pointer ${
-            video.video_url === selectedVideo?.video_url
-              ? "bg-blue-500 text-white"
-              : ""
-          }`}
-          onClick={() => setSelectedVideo(video)}>
-          <Image
-            src={getVideoThumbnail(video.video_url)}
-            alt={video.title}
-            className='w-full h-full object-cover'
-          />
-          <div className='p-4'>
-            <h3>{video.title}</h3>
-            <p>{video.description}</p>
-          </div>
-        </div>
+    <div className='flex flex-col gap-4 sm:justify-start items-center sm:w-80 w-full'>
+      <div className='w-full text-left'>
+        <h3 className='font-semibold text-white text-left'>All Videos</h3>
+      </div>
+      {videos.map((video, index) => (
+        <VideoListItem
+          video={video}
+          setSelectedVideo={setSelectedVideo}
+          selectedVideo={selectedVideo}
+          key={index}
+        />
       ))}
     </div>
   );
