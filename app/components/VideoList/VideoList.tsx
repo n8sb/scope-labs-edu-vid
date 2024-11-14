@@ -1,4 +1,4 @@
-import { VideoDomainType } from "../types";
+import { VideoDomainType } from "@/app/types";
 import { VideoListItem } from "./VideoListItem";
 
 export const VideoList = ({
@@ -10,10 +10,8 @@ export const VideoList = ({
   setSelectedVideo: (video: VideoDomainType) => void;
   selectedVideo: VideoDomainType | null;
 }) => {
-  if (videos.length === 0) return <p>Loading...</p>;
-
   return (
-    <div className='flex flex-col gap-4 sm:justify-start items-center sm:w-80 w-full'>
+    <div className='flex flex-col gap-4 sm:justify-start justify-center items-center sm:w-80 w-full'>
       <div className='w-full text-left'>
         <h3 className='font-semibold text-white text-left'>All Videos</h3>
       </div>

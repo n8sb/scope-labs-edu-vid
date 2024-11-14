@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { CommentDomainType } from "../types";
 import Image from "next/image";
-import { formatDate } from "../utils";
+import { formatDate } from "@/app/utils";
+import { CommentDomainType } from "@/app/types";
 
-export const Comment = ({ comment }: { comment: CommentDomainType }) => {
+export const SingleComment = ({ comment }: { comment: CommentDomainType }) => {
   const { content, user_id, created_at } = comment;
 
   const getAvatars = () => {

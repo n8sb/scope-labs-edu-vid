@@ -1,5 +1,5 @@
+import { VideoDomainType } from "@/app/types";
 import Image from "next/image";
-import { VideoDomainType } from "../types";
 
 export const VideoListItem = ({
   video,
@@ -11,14 +11,15 @@ export const VideoListItem = ({
   setSelectedVideo: (video: VideoDomainType) => void;
 }) => {
   const getVideoThumbnail = (videoUrl: string) => {
-    if (!videoUrl.includes("youtube.com")) return "globe.svg";
+    //use this code when accepting any kind of non youtube video URL
+    // if (!videoUrl.includes("youtube.com")) return "globe.svg";
 
     const videoId = videoUrl.split("v=")[1];
     return `https://img.youtube.com/vi/${videoId}/0.jpg`;
   };
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col items-center'>
       <div onClick={() => setSelectedVideo(video)}>
         <Image
           priority={true}
@@ -34,7 +35,7 @@ export const VideoListItem = ({
         />
       </div>
       <div className='p-2'>
-        <h3 className='font-semibold'>{video.title}</h3>
+        <h3 className='font-semibold text-wrap'>{video.title}</h3>
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
 import ReactPlayer from "react-player";
-import { VideoDomainType } from "../types";
+import { VideoDomainType } from "../../types";
 
-const VideoPlayer = ({
+export const VideoPlayer = ({
   selectedVideo,
 }: {
   selectedVideo: VideoDomainType | null;
 }) => {
-  if (!selectedVideo) return "Choose a video to see it here. :)";
+  if (!selectedVideo) return;
   const { title, description, video_url } = selectedVideo;
 
   return (
@@ -26,5 +26,3 @@ const VideoPlayer = ({
     </div>
   );
 };
-
-export default VideoPlayer;

@@ -1,5 +1,8 @@
 "use client";
 
+import { USER_ID } from "@/app/constants";
+import { postVideo } from "@/app/services/videos";
+import { VideoDomainType, VideoInputType } from "@/app/types";
 import {
   Dialog,
   DialogBackdrop,
@@ -7,20 +10,19 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { useState } from "react";
-import { USER_ID } from "../constants";
-import { postVideo } from "../services/videos";
-import { VideoDomainType, VideoInputType } from "../types";
 
 export const AddVideoModal = ({
   isModalOpen,
   setIsModalOpen,
   successAlert,
+  errorAlert,
   setSelectedVideo,
   getVideos,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
   successAlert: (message: string) => void;
+  errorAlert: (message: string) => void;
   setSelectedVideo: (video: VideoDomainType) => void;
   getVideos: () => void;
 }) => {
@@ -30,11 +32,13 @@ export const AddVideoModal = ({
   const [errorMessage, setErrorMessage] = useState("");
 
   const addVideo = async () => {
+    //basic validation
     if (!titleInput || !descriptionInput || !videoUrlInput) {
       setErrorMessage("All fields are required.");
       return;
     }
 
+    //only allowing youtube URLs for now since we can grab a thumbnail from the video URL
     if (!videoUrlInput.includes("youtube.com")) {
       setErrorMessage("Please enter a valid YouTube URL.");
       return;
@@ -53,14 +57,21 @@ export const AddVideoModal = ({
         setTitleInput("");
         setDescriptionInput("");
         setVideoUrlInput("");
+
+        // update the list of videos and select the new video
         getVideos();
         setSelectedVideo({ ...newVideo, id: USER_ID });
+
         successAlert("Video added successfully!");
       } else {
-        console.error("Error adding video:", result.error);
+        const errorMessage = result.error;
+        console.error("Failed to add video:", errorMessage);
+        errorAlert(`Failed to add video: ${errorMessage}`);
       }
     } catch (error) {
-      console.error("Error adding video:", error);
+      const errorMessage = error;
+      console.error("Failed to add video:", errorMessage);
+      errorAlert(`Failed to add video: ${errorMessage}`);
     }
   };
 
@@ -83,40 +94,42 @@ export const AddVideoModal = ({
                 <div className='sm:mx-4 sm:text-left w-full'>
                   <DialogTitle
                     as='h3'
-                    className='text-base font-semibold text-white'>
+                    className='font-semibold text-white text-lg'>
                     Add Video
                   </DialogTitle>
                   <div className='flex flex-col mt-2 w-100'>
-                    <label className='mt-3 mb-1 text-sm text-white'>
+                    <label className='mt-3 mb-1 text-md font-semibold text-white'>
                       Video URL
                     </label>
                     <input
                       value={videoUrlInput}
-                      className='px-1 rounded-sm text-black'
+                      className='px-1 rounded-sm text-white bg-gray-800 border border-gray-300 focus:ring-1 focus:ring-blue-600 focus:border-blue-600'
                       onChange={(e) => setVideoUrlInput(e.target.value)}
                     />
-                    <label className=' mt-3 mb-1 text-sm text-white'>
+                    <label className=' mt-3 mb-1 text-md font-semibold text-white'>
                       Title
                     </label>
                     <input
                       value={titleInput}
-                      className='px-1 rounded-sm text-black'
+                      className='px-1 rounded-sm text-white bg-gray-800 border border-gray-300 focus:ring-1 focus:ring-blue-600 focus:border-blue-600'
                       onChange={(e) => setTitleInput(e.target.value)}
                     />
-                    <label className='mt-3 mb-1 text-sm text-white '>
+                    <label className='mt-3 mb-1 text-md font-semibold text-white '>
                       Description
                     </label>
                     <textarea
                       value={descriptionInput}
-                      className='px-1 rounded-sm text-black'
+                      className='px-1 rounded-sm text-white bg-gray-800 border border-gray-300 focus:ring-1 focus:ring-blue-600 focus:border-blue-600'
                       onChange={(e) => setDescriptionInput(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <div className='bg-black mx-4 mb-6 mt-2 flex sm:px-6 gap-2 justify-between items-center'>
-              <div className='text-red-600 text-xs'>{errorMessage}</div>
+            <div className='mx-4 mb-6 mt-2 flex sm:px-6 gap-2 justify-between items-center'>
+              <div className='text-red-600 text-xs font-semibold'>
+                {errorMessage}
+              </div>
               <div>
                 <button
                   type='button'
