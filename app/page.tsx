@@ -22,6 +22,7 @@ export default function Home() {
   const getAllVideos = () => {
     getVideos().then((videos) => {
       // Update the state with the fetched videos
+      console.log(videos);
       setVideosList(videos);
       setSelectedVideo(videos[0]); // Set the first video as the selected video by default
     });
@@ -57,8 +58,8 @@ export default function Home() {
       <BarLoader
         color='#337AB7'
         loading={!selectedVideo}
-        width='100'
-        height='10'
+        width='100px'
+        height='10px'
       />
       {selectedVideo && (
         <div className='flex sm:flex-row flex-col justify-around w-full gap-5'>

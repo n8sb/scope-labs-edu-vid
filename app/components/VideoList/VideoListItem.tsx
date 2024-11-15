@@ -11,9 +11,6 @@ export const VideoListItem = ({
   setSelectedVideo: (video: VideoDomainType) => void;
 }) => {
   const getVideoThumbnail = (videoUrl: string) => {
-    //use this code when accepting any kind of non youtube video URL
-    // if (!videoUrl.includes("youtube.com")) return "globe.svg";
-
     const videoId = videoUrl.split("v=")[1];
     return `https://img.youtube.com/vi/${videoId}/0.jpg`;
   };
