@@ -31,16 +31,31 @@ export const AddVideoModal = ({
   const [videoUrlInput, setVideoUrlInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const validateYouTubeUrl = (videoUrl: string): boolean => {
+    const regExp =
+      /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/;
+    const match = videoUrl.match(regExp);
+    if (match) {
+      return true;
+    }
+
+    return false;
+  };
+
   const addVideo = async () => {
+    setErrorMessage("");
     //basic validation
     if (!titleInput || !descriptionInput || !videoUrlInput) {
       setErrorMessage("All fields are required.");
       return;
     }
 
+    const isUrlValid = validateYouTubeUrl(videoUrlInput);
     //only allowing youtube URLs for now since we can grab a thumbnail from the video URL
-    if (!videoUrlInput.includes("youtube.com")) {
-      setErrorMessage("Please enter a valid YouTube URL.");
+    if (isUrlValid === false) {
+      setErrorMessage(
+        "Please enter a valid YouTube URL in the format 'https://www.youtube.com/watch?v=...'."
+      );
       return;
     }
 
@@ -73,6 +88,14 @@ export const AddVideoModal = ({
       console.error("Failed to add video:", errorMessage);
       errorAlert(`Failed to add video: ${errorMessage}`);
     }
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setTitleInput("");
+    setDescriptionInput("");
+    setVideoUrlInput("");
+    setErrorMessage("");
   };
 
   return (
@@ -126,15 +149,12 @@ export const AddVideoModal = ({
                 </div>
               </div>
             </div>
-            <div className='mx-4 mb-6 mt-2 flex sm:px-6 gap-2 justify-between items-center'>
-              <div className='text-red-600 text-xs font-semibold'>
-                {errorMessage}
-              </div>
+            <div className='mx-4 mb-6 mt-2 flex flex-col sm:px-6 gap-2 justify-between items-end'>
               <div>
                 <button
                   type='button'
                   data-autofocus
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={handleClose}
                   className='mr-2 inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto'>
                   Cancel
                 </button>
@@ -144,6 +164,9 @@ export const AddVideoModal = ({
                   className='inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm sm:w-auto'>
                   Add Video
                 </button>
+              </div>
+              <div className='flex w-full text-red-600 text-xs font-semibold'>
+                {errorMessage}
               </div>
             </div>
           </DialogPanel>
