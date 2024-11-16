@@ -1,11 +1,11 @@
 **An overview:**  
 My educational video app uses an instance of NextJs with a simple and clean interface. It is limited to youtube videos since you can grab a screenshot from the video url to populate placeholder images for the playable videos. It is also responsive / mobile friendly. All API queries use the built in fetch API.
 
-I also used a handful of packages to enhance the apps functionality:   
-react-player - video player   
-react-spinners - loading indicator   
-react-toastify - alerts / notifications   
-faker-js - populate random commenter names / ids   
+I also used a handful of packages to enhance the app's functionality:  
+react-player - video player  
+react-spinners - loading indicator  
+react-toastify - alerts / notifications  
+faker-js - populate random commenter names / ids
 
 **How to run:**  
 Run the application by running the following commands:
