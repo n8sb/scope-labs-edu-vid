@@ -31,6 +31,4 @@ export const postVideo = async (videoInput: VideoInputType) => {
   if (!response.ok) {
     throw new Error("Failed to post video");
   }
-
-  return response.json();
 };

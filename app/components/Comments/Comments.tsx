@@ -23,9 +23,14 @@ export const Comments = ({
   // fetch comments when selected video changes
   useEffect(() => {
     if (!selectedVideo) return;
-    getComments(selectedVideo?.id).then((comments) => {
-      setComments(comments);
-    });
+    getComments(selectedVideo?.id)
+      .then((comments) => {
+        setComments(comments);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch comments:", error);
+        errorAlert("Failed to fetch comments");
+      });
   }, [selectedVideo]);
 
   const getUserId = () => {
@@ -49,24 +54,18 @@ export const Comments = ({
     };
 
     try {
-      const result = await postComment(newComment);
+      await postComment(newComment);
       const newDate = new Date();
-      if (result.success) {
-        setComments([
-          { ...newComment, created_at: newDate.toString() },
-          ...comments,
-        ]);
-        successAlert("Comment added");
-        setCommentInput("");
-      } else {
-        const errorMessage = result.error;
-        console.error("Failed to post comment:", errorMessage);
-        errorAlert(`Failed to post comment: ${errorMessage}`);
-      }
+      setComments([
+        { ...newComment, created_at: newDate.toString() },
+        ...comments,
+      ]);
+      successAlert("Comment added");
+      setCommentInput("");
     } catch (error) {
       const errorMessage = error;
-      console.error("Failed to post comment:", errorMessage);
-      errorAlert(`Failed to post comment: ${errorMessage}`);
+      console.error(errorMessage);
+      errorAlert(`${errorMessage}`);
     }
   };
 

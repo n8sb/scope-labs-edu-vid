@@ -1,4 +1,3 @@
-import { USER_ID } from "../constants";
 import { CommentInputType } from "../types";
 
 const baseUrl =
@@ -25,6 +24,4 @@ export const postComment = async (commentInput: CommentInputType) => {
   if (!response.ok) {
     throw new Error("Failed to create comment");
   }
-
-  return response.json();
 };

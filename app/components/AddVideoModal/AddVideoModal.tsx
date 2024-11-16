@@ -66,27 +66,22 @@ export const AddVideoModal = ({
     };
 
     try {
-      const result = await postVideo(newVideo);
-      if (result.success) {
-        setIsModalOpen(false);
-        setTitleInput("");
-        setDescriptionInput("");
-        setVideoUrlInput("");
+      await postVideo(newVideo);
 
-        // update the list of videos and select the new video
-        getVideos();
-        setSelectedVideo({ ...newVideo, id: USER_ID });
+      setIsModalOpen(false);
+      setTitleInput("");
+      setDescriptionInput("");
+      setVideoUrlInput("");
 
-        successAlert("Video added successfully!");
-      } else {
-        const errorMessage = result.error;
-        console.error("Failed to add video:", errorMessage);
-        errorAlert(`Failed to add video: ${errorMessage}`);
-      }
+      // update the list of videos and select the new video
+      getVideos();
+      setSelectedVideo({ ...newVideo, id: USER_ID });
+
+      successAlert("Video added successfully!");
     } catch (error) {
       const errorMessage = error;
-      console.error("Failed to add video:", errorMessage);
-      errorAlert(`Failed to add video: ${errorMessage}`);
+      console.error(errorMessage);
+      errorAlert(`${errorMessage}`);
     }
   };
 
